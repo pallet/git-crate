@@ -1,5 +1,8 @@
 # Release notes
 
+## pallet-crates-0.7.0-beta.1
+
+- Update for pallet 0.7
 
 ## pallet-crates-0.5.0
 
@@ -31,4 +34,3 @@
 - Extend git crate support to centos and arch
 
 - Add live test to git crate
-
