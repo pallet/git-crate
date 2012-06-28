@@ -7,7 +7,7 @@
     <version>0.7.1</version>
   </parent>
   <artifactId>git</artifactId>
-  <version>0.7.0-beta.1</version>
+  <version>0.7.0-SNAPSHOT</version>
 
   <scm>
     <connection>scm:git:git://github.com/pallet/git-crate.git</connection>
