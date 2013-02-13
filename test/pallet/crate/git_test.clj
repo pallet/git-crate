@@ -47,20 +47,36 @@
                  yum-server
                  (install-git)))))))
 
-;; (deftest live-test
-;;   (doseq [image live-test/*images*]
-;;     (live-test/test-nodes
-;;      [compute node-map node-types]
-;;      {:git
-;;       {:image image
-;;        :count 1
-;;        :phases {:bootstrap (plan-fn
-;;                             (package-manager :update)
-;;                             (package "coreutils") ;; for debian
-;;                             (automated-admin-user))
-;;                 :configure #'git
-;;                 :verify (plan-fn
-;;                          (exec-checked-script
-;;                           "check git command found"
-;;                           (git "--version")))}}}
-;;      (lift (:git node-types) :phase :verify :compute compute))))
+(comment
+  ;; TODO: fix this test
+  (deftest git-clone-test
+   []
+   (let [apt-server {:server {:image {} :packager :aptitude}}]
+     (is (= (first (build-actions/build-actions
+                    (conj {:phase-context "clone-or-pull"} apt-server)
+                    (when->
+                     (#{:amzn-linux :centos}
+                      (os-family (session)))
+                     (add-epel :version "5-4"))))
+            (first (build-actions/build-actions
+                    apt-server
+                    (clone-or-pull "git://github.com/zolrath/wemux.git"
+                                   "/usr/local/share/wemux"))))))))
+
+(deftest live-test
+  (doseq [image live-test/*images*]
+    (live-test/test-nodes
+     [compute node-map node-types]
+     {:git
+      {:image image
+       :count 1
+       :phases {:bootstrap (plan-fn
+                            (package-manager :update)
+                            (package "coreutils") ;; for debian
+                            (automated-admin-user))
+                :configure #'install-git
+                :verify (plan-fn
+                         (exec-checked-script
+                          "check git command found"
+                          (git "--version")))}}}
+     (lift (:git node-types) :phase :verify :compute compute))))
