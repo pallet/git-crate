@@ -10,58 +10,89 @@
         clojure.pprint
         pallet.test-utils)
   (:require
-   [pallet.context :as context]
+   [pallet.context :as context ]
    [pallet.build-actions :as build-actions]
-   [pallet.live-test :as live-test]))
+   [pallet.live-test :as live-test]
+   [pallet.test-utils]))
 
 (deftest git-test
-  []
   (let [apt-server {:server {:image {} :packager :aptitude}}]
-    (is (= (first (build-actions/build-actions
-                   (conj {:phase-context "install-git"} apt-server)
-                   (when->
-                    (#{:amzn-linux :centos}
-                     (os-family (session)))
-                    (add-epel :version "5-4"))
-                   (package-manager :update)
-                   (context/with-phase-context
-                     {:msg "packages"}
-                     (package "git-core")
-                     (package "git-email"))))
-           (first  (build-actions/build-actions
-                    apt-server
-                    (install-git))))))
+    (is (script-no-comment=
+         (first (build-actions/build-actions
+                    (conj {:phase-context "install-git"} apt-server)
+                  (context/with-phase-context
+                    {:msg "packages"}
+                    (package "git-core")
+                    (package "git-email"))))
+         (first  (build-actions/build-actions
+                     apt-server
+                   (install-git))))))
   (let [yum-server {:server {:image {} :packager :yum}} ]
-    (do (pprint (first (build-actions/build-actions
-                 (conj {:phase-context "install-git"} yum-server)
-                 (when->
-                  (#{:amzn-linux :centos}
-                   (os-family (session)))
-                  (add-epel :version "5-4"))
-                 (package-manager :update)
-                 (context/with-phase-context
-                   {:msg "packages"}
-                   (package "git")
-                   (package "git-email")))))
-        (pprint (first (build-actions/build-actions
-                 yum-server
-                 (install-git)))))))
+    (is (script-no-comment=
+         (first (build-actions/build-actions
+                    (conj {:phase-context "install-git"} yum-server)
+                  (context/with-phase-context
+                    {:msg "packages"}
+                    (package "git")
+                    (package "git-email"))))
+         (first (build-actions/build-actions
+                    yum-server
+                  (install-git)))))))
 
-(comment
-  ;; TODO: fix this test
-  (deftest git-clone-test
-   []
-   (let [apt-server {:server {:image {} :packager :aptitude}}]
-     (is (= (first (build-actions/build-actions
-                    (conj {:phase-context "clone-or-pull"} apt-server)
-                    (when->
-                     (#{:amzn-linux :centos}
-                      (os-family (session)))
-                     (add-epel :version "5-4"))))
-            (first (build-actions/build-actions
-                    apt-server
-                    (clone-or-pull "git://github.com/zolrath/wemux.git"
-                                   "/usr/local/share/wemux"))))))))
+(deftest git-clone-test
+  (let [apt-server {:server {:image {} :packager :aptitude}}]
+    (is (script-no-comment=
+         (first (build-actions/build-actions
+                    (conj {:phase-context "clone"} apt-server)
+                  (exec-checked-script
+                   "Clone git://github.com/zolrath/wemux.git into wemux"
+                   (if (not (file-exists? "wemux/.git/config"))
+                     ("git" clone
+                      "git://github.com/zolrath/wemux.git" "wemux")))))
+         (first (build-actions/build-actions apt-server
+                  (clone "git://github.com/zolrath/wemux.git")))))))
+
+(deftest git-pull-test
+  (let [apt-server {:server {:image {} :packager :aptitude}}]
+    (testing "defaults"
+      (is (script-no-comment=
+           (first (build-actions/build-actions
+                      (conj {:phase-context "pull"} apt-server)
+                    (exec-checked-script "Pull" ("git" pull))))
+           (first (build-actions/build-actions apt-server
+                    (pull))))))
+    (testing "remote"
+      (is (script-no-comment=
+           (first (build-actions/build-actions
+                      (conj {:phase-context "pull"} apt-server)
+                    (exec-checked-script
+                     "Pull from origin"
+                     ("git" pull origin))))
+           (first (build-actions/build-actions apt-server
+                    (pull :remote "origin"))))))
+    (testing "remote and branch"
+      (is (script-no-comment=
+           (first (build-actions/build-actions
+                      (conj {:phase-context "pull"} apt-server)
+                    (exec-checked-script
+                     "Pull master from origin"
+                     ("git" pull origin master))))
+           (first (build-actions/build-actions apt-server
+                    (pull :remote "origin" :branch "master"))))))))
+
+(deftest git-checkout-test
+  (let [apt-server {:server {:image {} :packager :aptitude}}]
+    (is (script-no-comment=
+         (first
+          (build-actions/build-actions
+              (conj {:phase-context "checkout"} apt-server)
+            (exec-checked-script
+             "Checkout master"
+             (if ("git" "show-ref" "--verify" "--quiet" "refs/heads/master")
+               ("git" checkout master)
+               ("git" checkout "-b" master master)))))
+         (first (build-actions/build-actions apt-server
+                  (checkout "master")))))))
 
 (deftest live-test
   (doseq [image live-test/*images*]
