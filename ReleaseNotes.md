@@ -1,6 +1,15 @@
 # Release notes
 
-## pallet-crates-0.7.0-beta.1
+## git-0.8.0-alpha.1
+
+- Use leiningen rather than maven
+
+- Split out clone, pull and checkout
+  Also adds a server-spec.
+
+- first try at 0.8 port
+
+## git-0.7.0-beta.1
 
 - Update for pallet 0.7
 
