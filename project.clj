@@ -1,4 +1,4 @@
-(defproject com.palletops/git-crate "0.8.0-SNAPSHOT"
+(defproject com.palletops/git-crate "0.8.0-alpha.1"
   :description "Pallet crate to install, configure and use java"
   :url "http://palletops.com"
   :license {:name "Eclipse Public License"
