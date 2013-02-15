@@ -1,0 +1,87 @@
+<html lang="en">
+  <head>
+    <title>pallet.crate.git documentation</title>
+    <link href="css/default.css" type="text/css" rel="stylesheet" />
+    <link href="css/codox-md.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/page_effects.js"></script>
+  </head>
+  <body>
+    <header>
+      <div id="header">
+        <h1 class="project-title">Git-crate 0.8.0-alpha.1 API documentation</h1>
+      </div>
+    </header>
+    <navigation>
+      <div id="namespaces" class="sidebar">
+        <h3>Namespaces</h3>
+        <ul class="ns-links">
+          <li class="ns-list"><a class="ns-link ns-name" href="pallet.crate.git.html">pallet.crate.git</a></li><li class="ns-list"><a class="ns-link ns-name" href="pallet.crate.git.html">pallet.crate.git</a></li>
+        </ul>
+      </div>
+      <div id="vars" class="sidebar">
+        <h3>Public Vars</h3>
+        <ul class="ns-var-links">
+          <li class="ns-var-list"><a class="ns-var-link ns-var-name" href="pallet.crate.git.html#var-branch%3F">branch?</a></li><li class="ns-var-list"><a class="ns-var-link ns-var-name" href="pallet.crate.git.html#var-checkout">checkout</a></li><li class="ns-var-list"><a class="ns-var-link ns-var-name" href="pallet.crate.git.html#var-clone">clone</a></li><li class="ns-var-list"><a class="ns-var-link ns-var-name" href="pallet.crate.git.html#var-install-git">install-git</a></li><li class="ns-var-list"><a class="ns-var-link ns-var-name" href="pallet.crate.git.html#var-pull">pull</a></li>
+        </ul>
+      </div>
+    </navigation>
+    <article>
+      <div id="content" class="namespace-docs">
+        <h2 class="namespace-title">pallet.crate.git documentation</h2>
+        <div class="doc"><p>Crate to install and use git.</p>
+</div>
+        <div class="ns-vars">
+          <div class="public">
+            <h3><a id="var-branch%3F" class="source var-name" href="https://github.com/pallet/java-crate/blob/develop/src/pallet/crate/git.clj#L24">branch?</a></h3>
+            <h4 class="var-type fn" id="var-type">fn</h4>
+            <div class="usage">[checkout-dir &amp; {:keys [user], :as options}]</div>
+            
+            
+            <div class="doc"><p>Which branch is checkout-dir currently using?</p>
+</div>
+          </div><div class="public">
+            <h3><a id="var-checkout" class="source var-name" href="https://github.com/pallet/java-crate/blob/develop/src/pallet/crate/git.clj#L56">checkout</a></h3>
+            <h4 class="var-type fn" id="var-type">fn</h4>
+            <div class="usage">[branch &amp; {:keys [remote-branch]}]</div>
+            
+            
+            <div class="doc"><p>Checkout a branch.
+An optional <code>:remote-branch</code> may be specified, which is used to create the
+branch if it doesn't already exist.</p>
+</div>
+          </div><div class="public">
+            <h3><a id="var-clone" class="source var-name" href="https://github.com/pallet/java-crate/blob/develop/src/pallet/crate/git.clj#L32">clone</a></h3>
+            <h4 class="var-type fn" id="var-type">fn</h4>
+            <div class="usage">[repo-uri &amp; {:keys [checkout-dir args], :or {checkout-dir (repo-name repo-uri)}, :as options}]</div>
+            
+            
+            <div class="doc"><p>Clone a repository from <code>repo-uri</code>, a uri string.
+By default the <code>:checkout-dir</code> option is found from the <code>repo-uri</code>.
+<code>:args</code> can be used to pass a sequence of arbitrary arguments to the
+clone command.</p>
+</div>
+          </div><div class="public">
+            <h3><a id="var-install-git" class="source var-name" href="https://github.com/pallet/java-crate/blob/develop/src/pallet/crate/git.clj#L10">install-git</a></h3>
+            <h4 class="var-type fn" id="var-type">fn</h4>
+            <div class="usage">[]</div>
+            
+            
+            <div class="doc"><p>Install git</p>
+</div>
+          </div><div class="public">
+            <h3><a id="var-pull" class="source var-name" href="https://github.com/pallet/java-crate/blob/develop/src/pallet/crate/git.clj#L46">pull</a></h3>
+            <h4 class="var-type fn" id="var-type">fn</h4>
+            <div class="usage">[&amp; {:keys [branch remote args], :as options}]</div>
+            
+            
+            <div class="doc"><p>Pull <code>:branch</code> from the specified <code>:remote</code> name.  The branch and remote
+are optional</p>
+</div>
+          </div>
+        </div>
+      </div>
+    </article>
+  </body>
+
+</html>
