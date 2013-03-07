@@ -1,0 +1,7 @@
+{:header "Git"
+ :title "Install and configure git."
+ :git-repo "https://github.com/pallet/git-crate"
+ :api-docs "http://palletops.com/git-crate/0.8/api"
+ :annotated-docs "http://palletops.com/git-crate/0.8/annotated/uberdoc.html"
+ :tag-prefix "git-"
+ :versions [{:pallet "0.8.0-beta.1" :version "0.8.0-alpha.1"}]}
