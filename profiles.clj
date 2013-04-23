@@ -11,7 +11,7 @@
  :doc {:dependencies [[codox-md "0.2.0"]]
        :codox {:writer codox-md.writer/write-docs
                :output-dir "doc/0.8/api"
-               :src-dir-uri "https://github.com/pallet/java-crate/blob/develop"
+               :src-dir-uri "https://github.com/pallet/git-crate/blob/develop"
                :src-linenum-anchor-prefix "L"}
        :aliases {"marg" ["marg" "-d" "doc/0.8/annotated"]
                  "codox" ["doc"]
