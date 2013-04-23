@@ -67,4 +67,4 @@ branch if it doesn't already exist."
 (defn git
   [_]
   (server-spec
-   :phases {:configure (plan-fn (install-git))}))
+   :phases {:install (plan-fn (install-git))}))
