@@ -2,6 +2,7 @@
   "Crate to install and use git."
   (:require
    [clojure.string :as string]
+   [clojure.tools.logging :refer [debugf]]
    [pallet.actions :refer [packages exec-script exec-checked-script]]
    [pallet.api :refer [plan-fn] :as api]
    [pallet.crate :refer [defplan admin-user os-family]]
@@ -16,6 +17,14 @@
    :yum ["git" "git-email"]
    :aptitude ["git-core" "git-email"]
    :pacman ["git"]))
+
+(defplan git
+  "Calls a git task. All arguments are passed to git."
+  [& args]
+  (debugf "git %s" (string/join " " args))
+  (exec-checked-script
+   (string/join " " (map name args))
+   ("git" ~(string/join " " (map name args)))))
 
 (defn repo-name [repo-uri]
   "Find a repository name from a repo uri string"
