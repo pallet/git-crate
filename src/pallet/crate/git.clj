@@ -3,7 +3,7 @@
   (:require
    [clojure.string :as string]
    [pallet.actions :refer [packages exec-script exec-checked-script]]
-   [pallet.api :refer [server-spec plan-fn]]
+   [pallet.api :refer [plan-fn] :as api]
    [pallet.crate :refer [defplan admin-user os-family]]
    [pallet.crate.package.epel :refer [add-epel]]))
 
@@ -64,7 +64,7 @@ branch if it doesn't already exist."
      ("git" checkout ~branch)
      ("git" checkout "-b" ~branch ~(or remote-branch branch)))))
 
-(defn git
+(defn server-spec
   [_]
-  (server-spec
+  (api/server-spec
    :phases {:install (plan-fn (install))}))
