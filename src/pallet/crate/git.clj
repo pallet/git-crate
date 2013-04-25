@@ -7,7 +7,7 @@
    [pallet.crate :refer [defplan admin-user os-family]]
    [pallet.crate.package.epel :refer [add-epel]]))
 
-(defplan install-git
+(defplan install
   "Install git"
   []
   (when (#{:amzn-linux :centos} (os-family))
@@ -67,4 +67,4 @@ branch if it doesn't already exist."
 (defn git
   [_]
   (server-spec
-   :phases {:install (plan-fn (install-git))}))
+   :phases {:install (plan-fn (install))}))
