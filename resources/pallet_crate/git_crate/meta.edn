@@ -1,4 +1,4 @@
-{:header "Git"
+{:header "git"
  :title "Install and configure git."
  :git-repo "https://github.com/pallet/git-crate"
  :api-docs "http://palletops.com/git-crate/0.8/api"
