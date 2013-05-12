@@ -11,7 +11,7 @@
 (defplan install
   "Install git"
   []
-  (when (#{:amzn-linux :centos} (os-family))
+  (when (#{:centos} (os-family))
    (add-epel :version "5-4"))
   (packages
    :yum ["git" "git-email"]
