@@ -15,6 +15,16 @@
    [pallet.live-test :as live-test]
    [pallet.test-utils]))
 
+(deftest repo-name-test
+  (is (= "simple"
+         (repo-name "git://github.com/simple/simple")))
+  (is (= "simple"
+         (repo-name "git://github.com/simple/simple.git")))
+  (is (= "www.gittip.com"
+         (repo-name "git://github.com/gittip/www.gittip.com")))
+    (is (= "www.gittip.com"
+         (repo-name "git://github.com/gittip/www.gittip.com.git"))))
+
 (deftest git-test
   (let [apt-server {:server {:image {} :packager :aptitude}}]
     (is (script-no-comment=
