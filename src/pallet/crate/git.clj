@@ -28,7 +28,7 @@
 
 (defn repo-name [repo-uri]
   "Find a repository name from a repo uri string"
-  (-> (string/split repo-uri #"/") last (string/replace #"\..*$" "")))
+  (-> (string/split repo-uri #"/") last (string/replace #"\.git$" "")))
 
 (defplan branch?
   "Which branch is checkout-dir currently using?"
