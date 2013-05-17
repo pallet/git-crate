@@ -15,29 +15,39 @@
    [pallet.live-test :as live-test]
    [pallet.test-utils]))
 
+(deftest repo-name-test
+  (is (= "simple"
+         (repo-name "git://github.com/simple/simple")))
+  (is (= "simple"
+         (repo-name "git://github.com/simple/simple.git")))
+  (is (= "www.gittip.com"
+         (repo-name "git://github.com/gittip/www.gittip.com")))
+    (is (= "www.gittip.com"
+         (repo-name "git://github.com/gittip/www.gittip.com.git"))))
+
 (deftest git-test
   (let [apt-server {:server {:image {} :packager :aptitude}}]
     (is (script-no-comment=
          (first (build-actions/build-actions
-                    (conj {:phase-context "install-git"} apt-server)
+                    (conj {:phase-context "install"} apt-server)
                   (context/with-phase-context
                     {:msg "packages"}
                     (package "git-core")
                     (package "git-email"))))
          (first  (build-actions/build-actions
                      apt-server
-                   (install-git))))))
+                   (install))))))
   (let [yum-server {:server {:image {} :packager :yum}} ]
     (is (script-no-comment=
          (first (build-actions/build-actions
-                    (conj {:phase-context "install-git"} yum-server)
+                    (conj {:phase-context "install"} yum-server)
                   (context/with-phase-context
                     {:msg "packages"}
                     (package "git")
                     (package "git-email"))))
          (first (build-actions/build-actions
                     yum-server
-                  (install-git)))))))
+                  (install)))))))
 
 (deftest git-clone-test
   (let [apt-server {:server {:image {} :packager :aptitude}}]
@@ -105,9 +115,9 @@
                             (package-manager :update)
                             (package "coreutils") ;; for debian
                             (automated-admin-user))
-                :configure #'install-git
+                :configure #'install
                 :verify (plan-fn
                          (exec-checked-script
                           "check git command found"
-                          (git "--version")))}}}
+                          ("git" "--version")))}}}
      (lift (:git node-types) :phase :verify :compute compute))))

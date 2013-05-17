@@ -2,24 +2,33 @@
   "Crate to install and use git."
   (:require
    [clojure.string :as string]
+   [clojure.tools.logging :refer [debugf]]
    [pallet.actions :refer [packages exec-script exec-checked-script]]
-   [pallet.api :refer [server-spec plan-fn]]
+   [pallet.api :refer [plan-fn] :as api]
    [pallet.crate :refer [defplan admin-user os-family]]
    [pallet.crate.package.epel :refer [add-epel]]))
 
-(defplan install-git
+(defplan install
   "Install git"
   []
-  (when (#{:amzn-linux :centos} (os-family))
+  (when (#{:centos} (os-family))
    (add-epel :version "5-4"))
   (packages
    :yum ["git" "git-email"]
    :aptitude ["git-core" "git-email"]
    :pacman ["git"]))
 
+(defplan git
+  "Calls a git task. All arguments are passed to git."
+  [& args]
+  (debugf "git %s" (string/join " " args))
+  (exec-checked-script
+   (string/join " " (map name args))
+   ("git" ~(string/join " " (map name args)))))
+
 (defn repo-name [repo-uri]
   "Find a repository name from a repo uri string"
-  (-> (string/split repo-uri #"/") last (string/replace #"\..*$" "")))
+  (-> (string/split repo-uri #"/") last (string/replace #"\.git$" "")))
 
 (defplan branch?
   "Which branch is checkout-dir currently using?"
@@ -64,7 +73,7 @@ branch if it doesn't already exist."
      ("git" checkout ~branch)
      ("git" checkout "-b" ~branch ~(or remote-branch branch)))))
 
-(defn git
+(defn server-spec
   [_]
-  (server-spec
-   :phases {:configure (plan-fn (install-git))}))
+  (api/server-spec
+   :phases {:install (plan-fn (install))}))
